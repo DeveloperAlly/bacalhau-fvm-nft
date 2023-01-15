@@ -1,18 +1,33 @@
 import { FC, ReactElement, ReactNode } from 'react';
 import styled from 'styled-components';
+import { ImageLayout } from '@Layouts';
+import { Box } from '@mui/material';
 
-const StyledLayout = styled.div`
-  background-color: #ff00ff;
-  height: 200px;
+//scrollable container for the images (SCROLL NOT WORKING)
+// should also auto scale images to page size
+
+const StyledLayout = styled(Box)`
+  height: auto;
+  width: 100%;
   padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  overflow: 'hidden';
+  overflow-y: 'scroll';
 `;
 
-type ImagePreviewContainerProps = {
+//should take an array prop
+interface ImagePreviewContainerProps {
   children?: ReactNode;
-};
+}
 
-export const ImagePreviewContainer: FC<ImagePreviewContainerProps> = ({
-  children,
-}): ReactElement => {
-  return <StyledLayout>{children}</StyledLayout>;
+export const ImagePreviewContainer = (props: ImagePreviewContainerProps) => {
+  return (
+    <StyledLayout>
+      <ImageLayout />
+      <ImageLayout />
+      <ImageLayout />
+    </StyledLayout>
+  );
 };

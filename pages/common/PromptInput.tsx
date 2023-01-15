@@ -18,6 +18,13 @@ type PromptInputProps = {
 
 export const PromptInput: FC<PromptInputProps> = ({}): ReactElement => {
   const [formInput, setFormInput] = useState({});
+  //button should change to loading/disabled when generating images.
+  const [buttonActive, setButtonActive] = useState(true);
+
+  const onButtonClick = () => {
+    console.log('push my buttons');
+    setButtonActive(false);
+  };
 
   useEffect(() => {
     console.log('input changed', formInput);
@@ -39,8 +46,13 @@ export const PromptInput: FC<PromptInputProps> = ({}): ReactElement => {
         id="prompt_input"
         onChange={(e) => setFormInput({ ...formInput, prompt: e.target.value })}
       />
-      <TextField label="# Images" id="number_copies" />
-      <PromptButton />
+      <TextField
+        label="# Images"
+        id="number_copies"
+        placeholder="Number of images to generate (max 3)"
+        onChange={(e) => setFormInput({ ...formInput, number: e.target.value })}
+      />
+      <PromptButton action={onButtonClick} enabled={buttonActive} />
     </StyledPromptInput>
   );
 };

@@ -1,10 +1,19 @@
+import { relative } from 'path/posix';
 import { ReactElement, ReactNode, FC } from 'react';
 import styled from 'styled-components';
 
 const StyledLayout = styled.div`
-  background-color: #eeff00;
+  display: flex;
   height: 200px;
   padding: 20px;
+  justify-content: center;
+  position: relative;
+`;
+
+const StyledMadeBy = styled.div`
+  position: absolute;
+  bottom: 1em;
+  width: 100%;
 `;
 
 type FooterProps = {
@@ -14,5 +23,9 @@ type FooterProps = {
 export const Footer: FC<FooterProps> = ({
   children,
 }: FooterProps): ReactElement => {
-  return <StyledLayout>{children}</StyledLayout>;
+  return (
+    <StyledLayout>
+      {children} <StyledMadeBy>Made by @developerAlly</StyledMadeBy>
+    </StyledLayout>
+  );
 };

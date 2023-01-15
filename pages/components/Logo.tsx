@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Images } from '@Assets/images';
 // import styled from 'styled-components';
 
-const { src, alt } = Images.logo;
+const { src, alt } = Images.logoHorizontal;
 
 // const StyledImage = styled.img`
 //   /* background-color: #00ff22; */

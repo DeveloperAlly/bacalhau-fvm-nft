@@ -4,10 +4,13 @@ import SendIcon from '@mui/icons-material/Send';
 import styled from 'styled-components';
 import { Box } from '@mui/material';
 
+//pass in prop here
 const StyledLoadingButton = styled(LoadingButton)`
   /* background-color: #0055ff; */
-  background: -webkit-linear-gradient(left, #30ccff 10%, #0055ff 70%);
-  color: white;
+  background: ${(props) =>
+    props.disabled
+      ? 'grey'
+      : `-webkit-linear-gradient(left, #30ccff 10%, #0055ff 70%); color: white`};
   font-weight: bold;
   font-size: larger;
   padding-top: 0.5em;
@@ -15,10 +18,14 @@ const StyledLoadingButton = styled(LoadingButton)`
 
 type PromptButtonProps = {
   text?: string;
-  handleClick?: Function;
+  enabled: boolean;
+  action: Function;
 };
 
-export const PromptButton: FC<PromptButtonProps> = ({}): ReactElement => {
+export const PromptButton: FC<PromptButtonProps> = ({
+  enabled,
+  action,
+}): ReactElement => {
   const [loading, setLoading] = useState(false);
   const handleClick = () => {
     console.log('im clickd', loading);
@@ -29,10 +36,13 @@ export const PromptButton: FC<PromptButtonProps> = ({}): ReactElement => {
       <StyledLoadingButton
         variant="contained"
         size="large"
-        endIcon={<SendIcon />}
-        onClick={handleClick}
+        endIcon={enabled ? <SendIcon /> : null}
+        onClick={() => action()}
+        // loading={enabled}
+        // loadingPosition="center"
+        disabled={!enabled}
       >
-        Generate Images!
+        {enabled ? 'Generate Images!' : 'Loading...'}
       </StyledLoadingButton>
     </Box>
   );

@@ -10,7 +10,7 @@ import {
 } from '@Layouts';
 import { Wallet, Logo } from '@Components';
 import { DappHeader } from '@Layouts';
-import { Title, SubTitle, PromptInput, PromptButton } from '@Common';
+import { Title, SubTitle, PromptInput } from '@Common';
 import { Typography } from '@mui/material';
 
 type HomePageProps = {
@@ -48,10 +48,6 @@ const HomePage: FC<HomePageProps> = () => {
           </>
         </ImagePreviewContainer>
         <Footer />
-        <main>
-          <Wallet />
-          hello again
-        </main>
       </>
     </LayoutContainer>
   );
