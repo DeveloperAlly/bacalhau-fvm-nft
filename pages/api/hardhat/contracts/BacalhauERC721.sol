@@ -6,6 +6,7 @@ import "../../../../node_modules/@openzeppelin/contracts/token/ERC721/extensions
 import "../../../../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../../../../node_modules/hardhat/console.sol"; 
 
+//new stuff
 contract BacalhauERC721 is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
