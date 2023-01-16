@@ -19,13 +19,13 @@
       "@Layouts": ["pages/layouts"],
       "@Components": ["pages/components"],
       "@Common": ["pages/common"],
+      "@Utils/*": ["pages/utils/*"],
       "@Assets/*": ["pages/assets/*"],
       "@Models": ["pages/models"],
       "@Analysers": ["pages/analysers"],
       "@Api/*": ["pages/api"],
-      "@Hardhat/*": ["pages/api/hardhat"],
-      "@Contracts/*": ["pages/api/hardhat/artifacts/contracts"],
-      "@Utils/*": ["pages/utils"]
+      "@Hardhat/*": ["pages/api/hardhat/*"],
+      "@Contracts/*": ["pages/api/hardhat/artifacts/contracts/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

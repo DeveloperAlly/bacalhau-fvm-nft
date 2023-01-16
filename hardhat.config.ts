@@ -8,8 +8,7 @@ import { resolve } from 'path';
 // import type { NetworkUserConfig } from 'hardhat/types';
 
 //Import our customised tasks
-import './pages/api/hardhat/tasks/deploy';
-import './pages/api/hardhat/tasks/accounts';
+import './pages/api/hardhat/tasks';
 
 const dotenvConfigPath: string = process.env.DOTENV_CONFIG_PATH || './.env';
 dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
@@ -66,8 +65,11 @@ const config: HardhatUserConfig = {
     // },
   },
   paths: {
+    sources: './pages/api/hardhat/contracts',
+    artifacts: './pages/api/hardhat/artifacts',
     root: './pages/api/hardhat',
     tests: './pages/api/hardhat/tests', //who names a directory in the singular?!!!
+    cache: './pages/api/hardhat/cache',
   },
   etherscan: {
     // Your API key for Etherscan

@@ -10,7 +10,8 @@ const StyledLoadingButton = styled(LoadingButton)`
   background: ${(props) =>
     props.disabled
       ? 'grey'
-      : `-webkit-linear-gradient(left, #30ccff 10%, #0055ff 70%); color: white`};
+      : `-webkit-linear-gradient(left, #30ccff 10%, #0055ff 70%)`};
+  color: white;
   font-weight: bold;
   font-size: larger;
   padding-top: 0.5em;

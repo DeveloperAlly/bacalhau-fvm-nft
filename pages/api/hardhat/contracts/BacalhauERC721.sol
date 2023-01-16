@@ -1,17 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 
 // https://docs.openzeppelin.com/contracts/4.x/erc721 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "hardhat/console.sol"; //alows for console.logs in a solidity contract"
+import "../../../../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "../../../../node_modules/@openzeppelin/contracts/utils/Counters.sol";
+import "../../../../node_modules/hardhat/console.sol"; 
 
 contract BacalhauERC721 is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-
-    uint256 public maxNFTs;
-    uint256 public remainingMintableNFTs;
 
     struct bacalhauERC721NFT {
         address owner;
@@ -20,25 +17,23 @@ contract BacalhauERC721 is ERC721URIStorage {
     }
 
     bacalhauERC721NFT[] public nftCollection;
+    //filter by owner? => do on front end or use a map here hmm
 
     event NewBacalhauERC721NFTMinted(
       address indexed sender,
       uint256 indexed tokenId,
-      string tokenURI,
-      uint256 remainingMintableNFTs
+      string tokenURI
     );
 
     constructor() ERC721("Bacalhau NFTs", "BAC") {
       console.log("This is my Bacalhau ERC721 NFT contract");
-      maxNFTs = 100; //set a limit to number of nft's that are mintable
-      remainingMintableNFTs = 100;
     }
 
-    function mintBacalhau(address owner, string memory ipfsURI)
+    function mintBacalhauNFT(address owner, string memory ipfsURI)
         public
         returns (uint256)
     {
-        require(_tokenIds.current() < maxNFTs);
+        // require(_tokenIds.current() < maxNFTs);
         uint256 newItemId = _tokenIds.current();
 
         bacalhauERC721NFT memory newNFT = bacalhauERC721NFT({
@@ -53,19 +48,35 @@ contract BacalhauERC721 is ERC721URIStorage {
 
 
         _tokenIds.increment();
-        // don't like this
-        remainingMintableNFTs = maxNFTs - _tokenIds.current();
 
         nftCollection.push(newNFT);
 
         emit NewBacalhauERC721NFTMinted(
           msg.sender,
           newItemId,
-          ipfsURI,
-          remainingMintableNFTs
+          ipfsURI
         );
 
         return newItemId;
+    }
+
+    /**
+    */
+    function mintMultipleBacalhauNFTs(address owner, string[] memory ipfsMetadata) public returns (uint256[] memory)
+    {
+        console.log('minting bacalhau nfts');
+
+        //get length of ipfsMetadata array
+        uint256 length = ipfsMetadata.length;
+        uint256[] memory tokenIdArray = new uint256[](length);
+
+        //loop through calling mintBacalhauNFT for each
+        uint j=0;
+        for (j = 0; j < length; j ++) {  //for loop example
+            tokenIdArray[j] = mintBacalhauNFT(owner, ipfsMetadata[j]);     
+        }
+
+        return tokenIdArray;
     }
 
     /**
@@ -73,9 +84,5 @@ contract BacalhauERC721 is ERC721URIStorage {
      */
     function getNFTCollection() public view returns (bacalhauERC721NFT[] memory) {
         return nftCollection;
-    }
-
-    function getRemainingMintableNFTs() public view returns (uint256) {
-        return remainingMintableNFTs;
     }
 }
