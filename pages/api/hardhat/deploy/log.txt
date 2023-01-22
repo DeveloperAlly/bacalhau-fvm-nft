@@ -1,0 +1,1 @@
+{"network":"wallaby","chainId":31415,"owner":"0x230115404c551Fcd0B6d447DE1DaD3afca230E07","address":"0xb2dA3bDE8F9503284008c21477fA3C8E0847ec8B","tx":"0xe49a3ef88802e4cc204a7a13c9bf2e7bad4c4d4d148b3cff1d31397bc17c6e75","explorerUrl":"https://explorer.glif.io/address/0xb2dA3bDE8F9503284008c21477fA3C8E0847ec8B"}
