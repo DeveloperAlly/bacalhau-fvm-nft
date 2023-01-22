@@ -1,14 +1,18 @@
 // import { Inter } from '@next/font/google';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { LayoutContainer, WebHeader } from '@Layouts';
+import {
+  ThemeProvider,
+  createTheme,
+  responsiveFontSizes,
+} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import HomePage from './HomePage';
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     mode: 'dark',
   },
 });
+theme = responsiveFontSizes(theme);
 
 // const inter = Inter({ subsets: ['latin'] });
 

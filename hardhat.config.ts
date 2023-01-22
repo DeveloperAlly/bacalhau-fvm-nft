@@ -34,14 +34,22 @@ if (!walletPrivateKey) {
 
 const config: HardhatUserConfig = {
   solidity: '0.8.17',
-  defaultNetwork: 'ethGoerli',
+  defaultNetwork: 'filecoinWallaby',
   networks: {
     hardhat: {},
     filecoinWallaby: {
       url: 'https://wallaby.node.glif.io/rpc/v0',
       chainId: 31415,
       accounts: [process.env.WALLET_PRIVATE_KEY ?? 'undefined'],
-      httpHeaders: {},
+      //explorer: https://wallaby.filscan.io/ and starboard
+    },
+    filecoinHyperspace: {
+      url: 'https://api.hyperspace.node.glif.io/rpc/v1', //https://beryx.zondax.ch/
+      chainId: 3141,
+      accounts: [process.env.WALLET_PRIVATE_KEY ?? 'undefined'],
+      //faucet: https://hyperspace.yoga/#faucet
+      //info: https://github.com/filecoin-project/testnet-hyperspace,
+      //explorer: glif, filfox??
     },
     ethGoerli: {
       url: 'https://eth-goerli.g.alchemy.com/v2/S4Rrp2eHb-xk5dxnNQygNcv-QfPmzTXX',
@@ -65,8 +73,6 @@ const config: HardhatUserConfig = {
     // },
   },
   paths: {
-    sources: './pages/api/hardhat/contracts',
-    artifacts: './pages/api/hardhat/artifacts',
     root: './pages/api/hardhat',
     tests: './pages/api/hardhat/tests', //who names a directory in the singular?!!!
     cache: './pages/api/hardhat/cache',

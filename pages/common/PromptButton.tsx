@@ -4,6 +4,8 @@ import SendIcon from '@mui/icons-material/Send';
 import styled from 'styled-components';
 import { Box } from '@mui/material';
 
+//need to pass in var for mint/generate options
+
 //pass in prop here
 const StyledLoadingButton = styled(LoadingButton)`
   /* background-color: #0055ff; */
@@ -14,36 +16,36 @@ const StyledLoadingButton = styled(LoadingButton)`
   color: white;
   font-weight: bold;
   font-size: larger;
-  padding-top: 0.5em;
+  padding-top: '0.5em';
 `;
 
 type PromptButtonProps = {
-  text?: string;
-  enabled: boolean;
+  disabled: boolean;
   action: Function;
+  text?: string;
 };
 
 export const PromptButton: FC<PromptButtonProps> = ({
-  enabled,
+  text,
+  disabled,
   action,
 }): ReactElement => {
-  const [loading, setLoading] = useState(false);
-  const handleClick = () => {
-    console.log('im clickd', loading);
-    setLoading(true);
-  };
   return (
     <Box>
       <StyledLoadingButton
         variant="contained"
         size="large"
-        endIcon={enabled ? <SendIcon /> : null}
+        endIcon={
+          disabled ? null : (
+            <SendIcon style={{ fontSize: 30, marginLeft: '0.5rem' }} />
+          )
+        }
         onClick={() => action()}
         // loading={enabled}
         // loadingPosition="center"
-        disabled={!enabled}
+        disabled={disabled}
       >
-        {enabled ? 'Generate Images!' : 'Loading...'}
+        {text ? text : ' Generate Images!'}
       </StyledLoadingButton>
     </Box>
   );

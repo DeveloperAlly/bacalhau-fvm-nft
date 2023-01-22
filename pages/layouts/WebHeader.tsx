@@ -11,6 +11,10 @@ export const WebHeader: React.FC = (): ReactElement => {
       />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href="/Bacalhau-plain.png" />
+      {/* <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      /> */}
     </Head>
   );
 };
