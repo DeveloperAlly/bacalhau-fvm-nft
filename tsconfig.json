@@ -18,10 +18,10 @@
     "paths": {
       "@Layouts": ["pages/layouts"],
       "@Components": ["pages/components"],
-      "@Common": ["pages/common"],
+      "@Common": ["pages/components"],
       "@Utils/*": ["pages/utils/*"],
       "@Assets/*": ["pages/assets/*"],
-      "@Models": ["pages/models/*"],
+      "@Models": ["pages/models.todo/*"],
       "@Analysers": ["pages/analysers"],
       "@Api/*": ["pages/api/*"],
       "@Hardhat/*": ["pages/api/hardhat/*"],

@@ -6,7 +6,7 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material'; //could be good here
-import { Status } from '@Utils/interfaces';
+import { Status } from '@Utils/definitions/interfaces';
 
 type LoadingDisplayProps = {
   status: Status;

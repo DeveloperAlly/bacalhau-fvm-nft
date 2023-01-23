@@ -1,6 +1,5 @@
 declare let window: any;
 import { FC, ReactNode, useState, useEffect } from 'react';
-import { ethers } from 'ethers';
 import { NFTStorage } from 'nft.storage';
 import { Typography } from '@mui/material';
 import {
@@ -10,8 +9,8 @@ import {
   InputContainer,
   LayoutContainer,
   WebHeader,
+  DappHeader,
 } from '@Layouts';
-import { DappHeader } from '@Layouts';
 import {
   Logo,
   Title,
@@ -22,12 +21,12 @@ import {
   StatusDisplay,
   PromptButton,
   // MintButton,
-} from '@Common';
+} from '@Components';
 import {
   INITIAL_WALLET_STATUS,
   INITIAL_TRANSACTION_STATE,
   NFT_METADATA_ATTRIBUTES,
-} from '@Utils/consts';
+} from '@Utils/definitions/consts';
 import {
   loadingMsg,
   successMintingNFTmsg,
@@ -37,16 +36,15 @@ import {
 import {
   changeWalletChain,
   checkForWalletConnection,
-  isChainIdCorrect,
   setWalletListeners,
-} from '@Utils/wallet_helper_functions';
+} from '@Utils/helpers/wallet_helper_functions';
 import {
   getContractConnection,
   setContractEventListeners,
-} from '@Utils/contracts_helper_functions';
-import { formatNFTCollectionForDisplay } from '@Utils/image_functions';
-import { getImageBlob } from '@Utils/helper_functions';
-import { BacalhauImage, ChainData } from '@Utils/interfaces';
+} from '@Utils/helpers/contract_helper_functions';
+import { formatNFTCollectionForDisplay } from '@Utils/helpers/image_helper_functions';
+import { getImageBlob } from '@Utils/helpers/general_helper_functions';
+import { BacalhauImage } from '@Utils/definitions/interfaces';
 
 type HomePageProps = {
   children?: ReactNode;
@@ -55,27 +53,29 @@ type HomePageProps = {
 const HomePage: FC<HomePageProps> = () => {
   // Wallet interactions (state )
   const [userWallet, setUserWallet] = useState(INITIAL_WALLET_STATUS);
+
+  // Fetched Data
   const [nftCollection, setNftCollection] = useState([]);
   const [ownedNftCollection, setOwnedNftCollection] = useState([]);
   const [imageLinks, setImageLinks] = useState([]);
 
-  // Contract interactions (events, calls etc)
-  const [testnet, setTestnet] = useState<string>('hyperspace');
+  // Contract interactions (events, calls etc) - future work - multi-chain contract
+  // const [networkChain, setNetworkChain] = useState<string>('hyperspace');
 
   // Bacalhau interactions
   const [bacalhauImages, setBacalhauImages] = useState<BacalhauImage[]>([]);
   const [prompt, setPrompt] = useState<string>('');
 
-  // NFT.Stroage?
-
   //Status
   const [status, setStatus] = useState(INITIAL_TRANSACTION_STATE);
 
+  // NFT.Stroage
   const NFTStorageClient = new NFTStorage({
     token: process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY ?? 'undefined',
   });
 
-  //INITIALISATION
+  // INITIALISATION
+  // TODO: clean this up
   useEffect(() => {
     getDisplayData(); //should work with read only mode
     console.log('Initialising DApp...');
@@ -86,15 +86,22 @@ const HomePage: FC<HomePageProps> = () => {
       }));
       checkForWalletConnection(setUserWallet);
       setWalletListeners(userWallet, setUserWallet);
-      setContractEventListeners(setStatus, getDisplayData, getNFTByOwner);
+      setContractEventListeners(
+        setStatus,
+        getDisplayData,
+        getNFTByOwner,
+        bacalhauImages,
+        setBacalhauImages
+      );
     } else {
       console.log('No Wallet connection detected!');
     }
   }, []);
 
-  //Handle wallet changes
+  // Handle wallet changes
+  // Unnecessary
   useEffect(() => {
-    console.log('UserWallet changed', userWallet);
+    // console.log('UserWallet changed', userWallet);
     //do things when this happens ?
     // console.log('hex chainid', ethers.utils.hexlify(3141));
     if (userWallet.chainId !== '0xc45') {
@@ -103,18 +110,20 @@ const HomePage: FC<HomePageProps> = () => {
     }
   }, [userWallet]);
 
+  // user changes wallet -> refetch ownedNFTs
   useEffect(() => {
-    // setOwnedNftCollection([]);
     getNFTByOwner();
   }, [userWallet.accounts[0]]);
 
+  // nftCollection data changes -> create new display links
+  // probably should just save it converted.
   useEffect(() => {
     if (nftCollection && nftCollection[0]) {
-      console.log('nftcollection', nftCollection);
       formatNFTCollectionForDisplay(nftCollection, setImageLinks);
     }
   }, [nftCollection]);
 
+  // fetch all nft's minted on this contract
   const getDisplayData = async () => {
     console.log('Fetching nft data from contract...');
     const contract: any = await getContractConnection('read');
@@ -133,8 +142,9 @@ const HomePage: FC<HomePageProps> = () => {
       });
   };
 
+  // fetch nft's by current address
   const getNFTByOwner = async () => {
-    console.log('Fetching nft data from contract...');
+    console.log('Fetching nft data by owner from contract...');
     const contract: any = await getContractConnection('read');
     await contract
       .getNFTCollectionByOwner(userWallet.accounts[0])
@@ -152,6 +162,7 @@ const HomePage: FC<HomePageProps> = () => {
       });
   };
 
+  // Stable diffusion script call (text to image prompt)
   const callBacalhauToGenerateImages = async (promptInput: string) => {
     //save to bacalhauImages
     console.log('Calling Bacalhau & Running Stable Diffusion Script.....');
@@ -166,29 +177,57 @@ const HomePage: FC<HomePageProps> = () => {
     // const cidStatus = await fetchNFTStoreStatus(
     //   'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq'
     // );
-    const bacalhauResult = {
-      name: 'Bacalhau Hyperspace NFTs 2023',
-      ipfsCID: 'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq',
-      prompt: promptInput,
-      minted: false,
-    };
+    const bacalhauJSON = await createNFTMetadata(
+      'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq',
+      promptInput
+    );
+    const bacalhauResult = { ...bacalhauJSON, minted: false };
+
+    // const bacalhauResult = {
+    //   name: 'Bacalhau Hyperspace NFTs 2023',
+    //   ipfsCID: 'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq',
+    //   prompt: promptInput,
+    //   minted: false,
+    // };
     console.log('bac result', bacalhauResult); //this will really be a CID
     setBacalhauImages([bacalhauResult]);
     // setBacalhauImages([...bacalhauImages, bacalhauResult]); // for now only ever display current - TODO: need to abstract components
     setStatus(INITIAL_TRANSACTION_STATE); //TODO: change to success
-
-    ///just display the image as a preview and add a mintNFT button.
-    // saveToNFTStorage(bacalhauResult, promptInput);
   };
 
-  const saveToNFTStorage = async (imageCID: string, promptInput: string) => {
+  const createNFTMetadata = async (imageCID: string, promptInput: string) => {
+    const imageData = await getImageBlob(status, setStatus, imageCID);
+
+    const nftJSON = {
+      name: 'Bacalhau Hyperspace NFTs 2023', //hmmm
+      description: promptInput,
+      image: imageData, // use image Blob as `image` field?
+      properties: {
+        prompt: promptInput,
+        type: 'stable-diffusion-image',
+        origins: {
+          ipfs: `ipfs://${imageCID}`,
+        },
+        innovation: 100,
+        content: {
+          'text/markdown': 'hello, world',
+        },
+      },
+    };
+
+    return nftJSON;
+  };
+
+  // Store NFT Metadata to NFT.Storage
+  const saveToNFTStorage = async (nftJson: any) => {
     //check wallet connection first
+    // TODO: move these functions to a generic call
     if (userWallet.accounts.length < 1) {
       setStatus({
         ...status,
         warning: genericMsg(
           'No wallet connection',
-          'Connect your wallet to Mint!'
+          'Connect your wallet to Mint an NFT!'
         ),
       });
       return;
@@ -205,31 +244,13 @@ const HomePage: FC<HomePageProps> = () => {
 
     setStatus({
       ...status,
-      loading: loadingMsg('Saving to NFT.Storage....'),
+      loading: loadingMsg('Saving Metadata to NFT.Storage....'),
     });
-    // const imageData = await getExampleImage(status, setStatus);
-    const imageData = await getImageBlob(status, setStatus, imageCID);
 
-    const nftJSON = {
-      name: NFT_METADATA_ATTRIBUTES.name, //hmmm
-      description: promptInput,
-      image: imageData, // use image Blob as `image` field?
-      properties: {
-        prompt: promptInput,
-        type: 'stable-diffusion-image',
-        origins: {
-          ipfs: `ipfs://${imageCID}`,
-        },
-        innovation: 100,
-        content: {
-          'text/markdown': 'hello, world',
-        },
-      },
-    };
-
-    await NFTStorageClient.store(nftJSON)
+    // const nftJSON = await createNFTMetadata(imageCID, promptInput);
+    await NFTStorageClient.store(nftJson)
       .then((metadata) => {
-        console.log('NFT Data Stored!');
+        console.log('NFT Data pinned to IPFS & stored on Filecoin!');
         console.log('Metadata URI: ', metadata.url);
         //ipfs://bafyreibuxx33xquhna345gna7ivgilk7nfod7odnx6jb7xfbslyhdv3m3y/metadata.json
         mintNFT(metadata);
@@ -243,12 +264,7 @@ const HomePage: FC<HomePageProps> = () => {
       });
   };
 
-  const fetchNFTStoreStatus = async (ipfsCID: string) => {
-    const nftStatus = await NFTStorageClient.status(ipfsCID);
-    console.log('nftstatus', nftStatus);
-    return nftStatus;
-  };
-
+  // Connect to the contract to mint the NFT!
   const mintNFT = async (metadata: any) => {
     //wallet checks required here.
     setStatus({
@@ -257,7 +273,6 @@ const HomePage: FC<HomePageProps> = () => {
     });
     const contract = await getContractConnection('write');
 
-    console.log('got connection', contract, userWallet);
     if (contract) {
       await contract
         .mintBacalhauNFT(
@@ -270,11 +285,12 @@ const HomePage: FC<HomePageProps> = () => {
             ...status,
             loading: loadingMsg('Minting NFT...'),
           });
-          await data
+          await data //CURRENTLY NOT RETURNING TX - KNOWN BUG (I use event triggering to know - not ideal)
             .wait()
             .then(async (tx: any) => {
               console.log('tx', tx);
               //test only - NEEDS a backend API call.
+              // may be fixed in future update and not needed
               // await callRPC('Filecoin.EthGetMessageCidByTransactionHash', [tx]);
               // const txToCID = await callRPC(
               //   'EthGetMessageCidByTransactionHash',
@@ -355,23 +371,19 @@ const HomePage: FC<HomePageProps> = () => {
               </Typography>
             )}
             {bacalhauImages.length > 0 && (
-              // really want a mint button under this....
               <>
                 <SubTitle text="Bacalhau Result" />
                 <ImagePreviewContainer
                   images={bacalhauImages}
                   mode="bacalhau"
-                ></ImagePreviewContainer>
-                <PromptButton
-                  text="Mint NFT!"
-                  disabled={Boolean(status.loading)}
-                  action={() =>
-                    saveToNFTStorage(
-                      bacalhauImages[0].ipfsCID,
-                      bacalhauImages[0].prompt
-                    )
-                  }
                 />
+                {!bacalhauImages[0].minted && (
+                  <PromptButton
+                    text={'Mint NFT!'}
+                    disabled={Boolean(status.loading)}
+                    action={() => saveToNFTStorage(bacalhauImages[0])}
+                  />
+                )}
                 <br />
               </>
             )}

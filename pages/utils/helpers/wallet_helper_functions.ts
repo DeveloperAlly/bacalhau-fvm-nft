@@ -1,5 +1,8 @@
-import { CHAIN_MAPPINGS, INITIAL_WALLET_STATUS } from '@Utils/consts';
-import { Wallet } from './interfaces';
+import {
+  CHAIN_MAPPINGS,
+  INITIAL_WALLET_STATUS,
+} from '@Utils/definitions/consts';
+import { Wallet } from '../definitions/interfaces';
 
 declare let window: any;
 
@@ -87,7 +90,6 @@ export const setWalletListeners = (
   if (window.ethereum) {
     // subscribe to provider events compatible with EIP-1193 standard.
     window.ethereum.on('accountsChanged', (accounts: any) => {
-      console.log('wallet: accounts', accounts);
       //logic to check if disconnected accounts[] is empty
       if (accounts.length < 1) {
         //handle the locked wallet case
@@ -103,7 +105,6 @@ export const setWalletListeners = (
 
     // Subscribe to chainId change
     window.ethereum.on('chainChanged', (chainId: any) => {
-      console.log('wallet: chainId', chainId);
       if (chainId === null) {
         //handle the locked wallet case
       }

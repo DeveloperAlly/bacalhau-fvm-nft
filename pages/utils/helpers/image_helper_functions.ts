@@ -28,7 +28,6 @@ export const createIPFSgatewayLink = (el: any) => {
     Needs to be a hook with loading state
   */
 export const createImageURLsForRetrieval = async (collection: Object[]) => {
-  console.log('collection', collection);
   if (!collection || !collection[0]) return;
   // only return the 5 most recent NFT images
   // this collection is fetched on webpage load
@@ -49,7 +48,6 @@ export const createImageURLsForRetrieval = async (collection: Object[]) => {
     })
   );
 
-  console.log('imgURLs2', imgURLs);
   return imgURLs;
 };
 

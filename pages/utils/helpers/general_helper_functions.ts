@@ -1,5 +1,5 @@
-import { Status } from './interfaces';
-import { errorMsg } from './messages';
+import { Status } from '../definitions/interfaces';
+import { errorMsg } from '../messages';
 
 //timeouts for long delays from the server
 export const withTimeout = (millis: number, promise: Promise<any>) => {

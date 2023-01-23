@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Button } from '@mui/material';
-import { connectWallet } from '@Utils/wallet_helper_functions';
-import { Wallet } from '@Utils/interfaces';
+import { connectWallet } from '@Utils/helpers/wallet_helper_functions';
+import { Wallet } from '@Utils/definitions/interfaces';
 
 type WalletProps = {
   userWallet: Wallet;

@@ -16,10 +16,20 @@ export interface Wallet {
 
 export interface BacalhauImage {
   name: string;
-  ipfsCID: string;
-  prompt: string;
+  description: string;
+  image: Blob; //the blob of the image data
+  properties: {
+    prompt: string;
+    content: object;
+    innovation: number;
+    origins: { ipfs: string };
+    type: string;
+  };
   minted: boolean;
-  cidStatus?: object; //NFT.Storage deals and pinning info
+  // ipfsCID: string;
+  // prompt: string;
+  // minted: boolean;
+  // cidStatus?: object; //NFT.Storage deals and pinning info
 }
 
 export interface NFTMetadata {

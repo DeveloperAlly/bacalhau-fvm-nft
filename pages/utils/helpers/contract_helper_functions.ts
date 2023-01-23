@@ -1,18 +1,20 @@
 declare let window: any;
 import { ethers } from 'ethers';
 import BacalhauCompiledContract from '@Contracts/BacalhauFRC721.sol/BacalhauFRC721.json';
-import { CHAIN_DATA, INITIAL_WALLET_STATUS } from '@Utils/consts';
-import { ChainData } from '@Utils/interfaces';
+import { CHAIN_DATA, INITIAL_WALLET_STATUS } from '@Utils/definitions/consts';
+import { BacalhauImage, ChainData } from '@Utils/definitions/interfaces';
+import { genericMsg, successMintingNFTmsg } from '../messages';
 
+// TODO: FIX THIS HARD CODING
 const contractAddressHyperspace = '0x826b3aab262C5f0297F61595c6fbAD0655C73021';
-// process.env.NEXT_PUBLIC_BACALHAUERC721_CONTRACT_ADDRESS; //'0x126a4cE56624070Ade7cd4DA0Ffe47975F557eAA';
+// process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS; //'0x126a4cE56624070Ade7cd4DA0Ffe47975F557eAA';
 const wallaby = '0x1096440D62659D0e73647046db8b81Ca1593CABc';
 const voidSignerAddress = '0xe443A4C016e7e0Cfd7857Ba426b27Dc614725045';
 
 //Destructure for other chain additions
-//TODO: Fix me. both return the same thing
 export const getContractConnection = async (mode: String) => {
   console.log('Connection to Contract...');
+  // TO DO - no hardcoding
   let rpc = process.env.NEXT_PUBLIC_RPC_FILECOIN_HYPERSPACE;
   let provider, signer, bacalhauContract;
   if (mode === 'read') {
@@ -67,11 +69,11 @@ export const fetchContractConnection = async (
 export const setContractEventListeners = async (
   setStatus: Function,
   getDisplayData: Function,
-  getNFTByOwner: Function
+  getNFTByOwner: Function,
+  bacalhauImages: BacalhauImage[],
+  setBacalhauImages: Function
 ) => {
   const connectedContract: any = await getContractConnection('read');
-  console.log('connectedcontract', connectedContract);
-  // THIS NEVER FIRES - fvm events bug?
   connectedContract.on(
     'NewBacalhauFRC721NFTMinted',
     (sender: string, tokenId: number, tokenURI: string) => {
@@ -81,10 +83,14 @@ export const setContractEventListeners = async (
         tokenId,
         tokenURI
       );
-      setStatus({ ...INITIAL_WALLET_STATUS, success: 'Minted NFT' });
-      () => getDisplayData();
-      () => getNFTByOwner();
-      console.log('re-fetch data on trigger');
+      setStatus({
+        ...INITIAL_WALLET_STATUS,
+        success: successMintingNFTmsg(tokenURI),
+      });
+      getDisplayData();
+      getNFTByOwner();
+      // let bacImg = { ...bacalhauImages[0], minted: true };
+      setBacalhauImages([{ ...bacalhauImages[0], minted: true }]);
     }
   );
 };

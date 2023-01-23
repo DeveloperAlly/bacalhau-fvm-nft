@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Typography, Icon, IconButton } from '@mui/material';
-import { INITIAL_TRANSACTION_STATE } from '@Utils/consts';
-import { Status } from '@Utils/interfaces';
+import { INITIAL_TRANSACTION_STATE } from '@Utils/definitions/consts';
+import { Status } from '@Utils/definitions/interfaces';
 // import { Status } from '@Models/';
 
 type StatusDisplayProps = {

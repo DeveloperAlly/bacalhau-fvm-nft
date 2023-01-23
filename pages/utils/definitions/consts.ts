@@ -44,7 +44,7 @@ export const CHAIN_DATA = {
     rpc: process.env.NEXT_PUBLIC_RPC_FILECOIN_WALLABY,
     contractAddress: {
       // erc1155: process.env.REACT_APP_GOERLI_CONTRACT_ADDRESS_1155,
-      erc721: process.env.NEXT_PUBLIC_BACALHAUERC721_CONTRACT_ADDRESS,
+      erc721: process.env.NEXT_PUBLIC_BACALHAURC721_CONTRACT_ADDRESS,
     },
     blockExplorer: {
       name: 'Starboard',
@@ -57,7 +57,7 @@ export const CHAIN_DATA = {
     rpc: process.env.NEXT_PUBLIC_RPC_FILECOIN_HYPERSPACE,
     contractAddress: {
       // erc1155: process.env.REACT_APP_GOERLI_CONTRACT_ADDRESS_1155,
-      erc721: process.env.NEXT_PUBLIC_BACALHAUERC721_CONTRACT_ADDRESS_HS,
+      erc721: process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS_HS,
     },
     blockExplorer: {
       name: 'Filscan',
@@ -194,7 +194,7 @@ export const blockExplorerRoots = {
     'https://wallaby.filscan.io/address/general?address=',
   ],
   hyperspace: [
-    'https://hyperspace.filscan.io/address/general?address=',
     'https://fvm.starboard.ventures/contracts/',
+    'https://hyperspace.filscan.io/address/general?address=',
   ],
 };
