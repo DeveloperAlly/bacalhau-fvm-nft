@@ -5,10 +5,9 @@ import '@nomicfoundation/hardhat-toolbox';
 import { config as dotenvConfig } from 'dotenv';
 import { HardhatUserConfig } from 'hardhat/config';
 import { resolve } from 'path';
-// import type { NetworkUserConfig } from 'hardhat/types';
 
 //Import our customised tasks
-import './pages/api/hardhat/tasks';
+// import './pages/api/hardhat/tasks';
 
 const dotenvConfigPath: string = process.env.DOTENV_CONFIG_PATH || './.env';
 dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
