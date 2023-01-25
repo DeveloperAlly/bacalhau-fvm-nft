@@ -14,6 +14,7 @@ const loadingMsg = (msg?: string) => {
 
 //data: { hash: any }
 const successMintingNFTmsg = (data: any, msg?: string) => {
+  console.log('data msg', data);
   return (
     <>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -35,7 +36,7 @@ const successMintingNFTmsg = (data: any, msg?: string) => {
         sx={{ fontWeight: 'bold', wordWrap: 'break-word' }}
       >
         Contract Address:{' '}
-        {process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS_HS}
+        {process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS_HS || ''}
       </Typography>
       {/* TODO: TX HASHES are not available on the current block explorers for now 
             - so can only see this transaction by going to the contract  */}

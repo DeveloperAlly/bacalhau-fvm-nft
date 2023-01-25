@@ -29,11 +29,11 @@ export const PromptInput: FC<PromptInputProps> = ({
       }}
     >
       <TextField
-        fullWidth
         label="Text Prompt"
         placeholder="A rainbow Bacalhau in the style of a Monet picture dancing on an Australian Beach"
         id="prompt_input"
         onChange={(e) => setPrompt(e.target.value)}
+        sx={{ width: '60%', justifySelf: 'center' }}
       />
       {children}
       {/* <TextField

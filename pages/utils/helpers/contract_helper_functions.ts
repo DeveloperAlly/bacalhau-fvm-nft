@@ -6,7 +6,8 @@ import { BacalhauImage, ChainData } from '@Utils/definitions/interfaces';
 import { genericMsg, successMintingNFTmsg } from '../messages';
 
 // TODO: FIX THIS HARD CODING
-const contractAddressHyperspace = '0x826b3aab262C5f0297F61595c6fbAD0655C73021';
+const contractAddressHyperspace: string =
+  process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS || ''; //'0x826b3aab262C5f0297F61595c6fbAD0655C73021';
 // process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS; //'0x126a4cE56624070Ade7cd4DA0Ffe47975F557eAA';
 const wallaby = '0x1096440D62659D0e73647046db8b81Ca1593CABc';
 const voidSignerAddress = '0xe443A4C016e7e0Cfd7857Ba426b27Dc614725045';
@@ -89,9 +90,6 @@ export const setContractEventListeners = async (
       });
       getDisplayData();
       getNFTByOwner();
-      // let bacImg = { ...bacalhauImages[0], minted: true };
-      // console.log('bacImg', bacImg);
-      // setBacalhauImages([bacImg]);
       setBacalhauImages((prevState: BacalhauImage[]) => [
         {
           ...prevState[0],

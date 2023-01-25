@@ -38,7 +38,7 @@ export const CHAIN_DATA = {
     rpc: process.env.NEXT_PUBLIC_RPC_FILECOIN_WALLABY,
     contractAddress: {
       // erc1155: process.env.REACT_APP_GOERLI_CONTRACT_ADDRESS_1155,
-      erc721: process.env.NEXT_PUBLIC_BACALHAURC721_CONTRACT_ADDRESS,
+      erc721: process.env.NEXT_PUBLIC_BACALHAUFRC721_CONTRACT_ADDRESS,
     },
     blockExplorer: {
       name: 'Starboard',

@@ -109,7 +109,7 @@ const HomePage: FC<HomePageProps> = () => {
     //do things when this happens ?
     // console.log('hex chainid', ethers.utils.hexlify(3141));
     if (userWallet.chainId !== '0xc45') {
-      console.log('wrong chain', userWallet.chainId);
+      // console.log('wrong chain', userWallet.chainId);
       // display a dialog
     }
   }, [userWallet]);
@@ -169,16 +169,20 @@ const HomePage: FC<HomePageProps> = () => {
   const callBacalhauToGenerateImages = async (promptInput: string) => {
     //save to bacalhauImages
     console.log('Calling Bacalhau & Running Stable Diffusion Script.....');
-    setStatus((prevState) => ({
-      ...prevState,
+    setStatus({
+      ...INITIAL_TRANSACTION_STATE,
       loading: loadingMsg(
         'Calling Bacalhau & Running Stable Diffusion Script...'
       ),
-    }));
+    });
 
     await callBacalhauJob(promptInput)
       .then(async (cid) => {
         console.log('Bacalhau Job Successful', cid);
+        setStatus({
+          ...INITIAL_TRANSACTION_STATE,
+          loading: loadingMsg('Creating Metadata from Bacalhau Job Results...'),
+        });
         const imageIPFSOrigin = `ipfs://${cid}/outputs/image0.png`;
         const imageHTTPURL = `https://${cid}.ipfs.nftstorage.link/outputs/image0.png`;
         await createNFTMetadata(promptInput, imageIPFSOrigin, imageHTTPURL)
@@ -421,11 +425,7 @@ const HomePage: FC<HomePageProps> = () => {
               <PromptButton
                 action={() => callBacalhauToGenerateImages(prompt)}
                 disabled={Boolean(status.loading) || !Boolean(prompt)}
-                text={
-                  bacalhauImages.length > 0
-                    ? 'Re-generate Image'
-                    : 'Generate Images'
-                }
+                text="Generate Image"
               />
             </PromptInput>
           </>
@@ -433,7 +433,7 @@ const HomePage: FC<HomePageProps> = () => {
         <br />
         <SubTitle text="Your NFT Collection" />
         {/* TODO: fix this section */}
-        {ownedNftCollection && ownedNftCollection.length > 0 ? (
+        {ownedNftCollection?.length > 0 ? (
           <ImagePreviewContainer images={ownedNftCollection} mode="nft" />
         ) : userWallet.accounts.length > 0 ? (
           <Typography variant="subtitle1">Mint your first NFT!</Typography>
