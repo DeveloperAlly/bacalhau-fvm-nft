@@ -1,3 +1,4 @@
+export {};
 // import { companyLogo, twitterLogo } from '../assets';
 
 // export const headerDetails = {
