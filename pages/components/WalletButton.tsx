@@ -13,7 +13,7 @@ export const WalletButton: FC<WalletProps> = ({
   setUserWallet,
   ...rest
 }) => {
-  const walletStates = {
+  const walletStates: any = {
     connectState: {
       name: 'Connect',
       action: () => connectWallet(setUserWallet),
