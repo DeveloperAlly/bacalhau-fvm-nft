@@ -43,8 +43,12 @@ import {
   setContractEventListeners,
 } from '@Utils/helpers/contract_helper_functions';
 import { formatNFTCollectionForDisplay } from '@Utils/helpers/image_helper_functions';
-import { getImageBlob } from '@Utils/helpers/general_helper_functions';
-import { BacalhauImage } from '@Utils/definitions/interfaces';
+import {
+  callBacalhauJob,
+  getImageBlob,
+} from '@Utils/helpers/general_helper_functions';
+import { BacalhauImage, BacalhauJob } from '@Utils/definitions/interfaces';
+import { CID } from 'multiformats/cid';
 
 type HomePageProps = {
   children?: ReactNode;
@@ -151,7 +155,6 @@ const HomePage: FC<HomePageProps> = () => {
       .then(async (nftCollection: any) => {
         console.log('NFT collection by owner', nftCollection);
         formatNFTCollectionForDisplay(nftCollection, setOwnedNftCollection);
-        // setOwnedNftCollection(nftCollection);
       })
       .catch((err: any) => {
         console.log('NFT fetching err', err);
@@ -172,49 +175,76 @@ const HomePage: FC<HomePageProps> = () => {
         'Calling Bacalhau & Running Stable Diffusion Script...'
       ),
     }));
-    //call bacalhau here
-    // const bacalhauResultCID = await getExampleImage(status, setStatus);
-    // const cidStatus = await fetchNFTStoreStatus(
-    //   'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq'
-    // );
-    const bacalhauJSON = await createNFTMetadata(
-      'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq',
-      promptInput
-    );
-    const bacalhauResult = { ...bacalhauJSON, minted: false };
 
-    // const bacalhauResult = {
-    //   name: 'Bacalhau Hyperspace NFTs 2023',
-    //   ipfsCID: 'bafkreic7fpje6mhilvneyigzxbrvl4h3qkxioov4wziqg42fhuccesvzcq',
-    //   prompt: promptInput,
-    //   minted: false,
-    // };
-    console.log('bac result', bacalhauResult); //this will really be a CID
-    setBacalhauImages([bacalhauResult]);
-    // setBacalhauImages([...bacalhauImages, bacalhauResult]); // for now only ever display current - TODO: need to abstract components
-    setStatus(INITIAL_TRANSACTION_STATE); //TODO: change to success
+    await callBacalhauJob(promptInput)
+      .then(async (cid) => {
+        console.log('Bacalhau Job Successful', cid);
+        const imageIPFSOrigin = `ipfs://${cid}/outputs/image0.png`;
+        const imageHTTPURL = `https://${cid}.ipfs.nftstorage.link/outputs/image0.png`;
+        await createNFTMetadata(promptInput, imageIPFSOrigin, imageHTTPURL)
+          .then((data: any) => {
+            console.log('Nft Metadata created', data);
+            const bacalhauResult = { ...data, minted: false };
+            console.log('bacResult', bacalhauResult, bacalhauImages);
+            setBacalhauImages([bacalhauResult]);
+            setStatus({
+              ...INITIAL_TRANSACTION_STATE,
+              success: genericMsg(
+                'Success running Bacalhau Job',
+                `Job output CID: ${cid}`
+              ),
+            });
+          })
+          .catch((err) => {
+            setStatus({
+              ...INITIAL_TRANSACTION_STATE,
+              error: errorMsg('Error creating NFT Metadata', err),
+            });
+            console.log('err', err);
+          });
+      })
+      .catch((err) => {
+        setStatus({
+          ...INITIAL_TRANSACTION_STATE,
+          error: errorMsg('Error Fetch Stable Diffusion Result', err),
+        });
+        console.log('err', err);
+      });
   };
 
-  const createNFTMetadata = async (imageCID: string, promptInput: string) => {
-    const imageData = await getImageBlob(status, setStatus, imageCID);
-
-    const nftJSON = {
-      name: 'Bacalhau Hyperspace NFTs 2023', //hmmm
-      description: promptInput,
-      image: imageData, // use image Blob as `image` field?
-      properties: {
-        prompt: promptInput,
-        type: 'stable-diffusion-image',
-        origins: {
-          ipfs: `ipfs://${imageCID}`,
-        },
-        innovation: 100,
-        content: {
-          'text/markdown': 'hello, world',
-        },
-      },
-    };
-
+  const createNFTMetadata = async (
+    promptInput: string,
+    imageIPFSOrigin: string,
+    imageHTTPURL: string //fetchable through http
+  ) => {
+    console.log('Creating NFT Metadata...');
+    let nftJSON;
+    await getImageBlob(status, setStatus, imageHTTPURL).then(
+      async (imageData) => {
+        await NFTStorageClient.storeBlob(imageData)
+          .then((imageIPFS) => {
+            console.log(imageIPFS);
+            nftJSON = {
+              name: 'Bacalhau Hyperspace NFTs 2023',
+              description: promptInput,
+              image: imageData, // use image Blob as `image` field?
+              properties: {
+                prompt: promptInput,
+                type: 'stable-diffusion-image',
+                origins: {
+                  ipfs: `ipfs://${imageIPFS}`,
+                  bacalhauipfs: imageIPFSOrigin,
+                },
+                innovation: 100,
+                content: {
+                  'text/markdown': promptInput,
+                },
+              },
+            };
+          })
+          .catch((err) => console.log('error creating blob cid', err));
+      }
+    );
     return nftJSON;
   };
 
@@ -247,7 +277,6 @@ const HomePage: FC<HomePageProps> = () => {
       loading: loadingMsg('Saving Metadata to NFT.Storage....'),
     });
 
-    // const nftJSON = await createNFTMetadata(imageCID, promptInput);
     await NFTStorageClient.store(nftJson)
       .then((metadata) => {
         console.log('NFT Data pinned to IPFS & stored on Filecoin!');

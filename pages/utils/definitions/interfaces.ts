@@ -14,6 +14,13 @@ export interface Wallet {
   message: String; //display any information about incorrect chain or locked wallet?
 }
 
+export interface BacalhauJob {
+  cid: string;
+  imageIPFSOrigin: string;
+  imageHTTPURL: string;
+  status: string;
+}
+
 export interface BacalhauImage {
   name: string;
   description: string;

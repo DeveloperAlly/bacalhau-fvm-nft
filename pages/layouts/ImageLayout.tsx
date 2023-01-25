@@ -29,13 +29,15 @@ export const ImageLayout: FC<ImageLayoutProps> = ({
   useEffect(() => {
     let linkArr = data.properties.origins.ipfs.split('/');
     let ipfsCID = linkArr[2];
-    fetchDeals(ipfsCID);
-  }, []);
+    // fetchDeals(ipfsCID); //getting cors or rate limited
+  }, [src]);
 
   const fetchDeals = async (ipfsCID: string) => {
-    const nftdeals = await fetchNFTStoreStatus(ipfsCID);
-    setDeals(nftdeals);
-    return deals;
+    const nftdeals = await fetchNFTStoreStatus(ipfsCID)
+      .then((resp) => {
+        setDeals(nftdeals);
+      })
+      .catch((err) => console.log('error fetching deals', err));
   };
 
   return (
@@ -53,12 +55,11 @@ export const ImageLayout: FC<ImageLayoutProps> = ({
       />
       <Box>
         <Typography style={{ wordWrap: 'break-word' }}>
-          {`Name: ${data.name}`}
+          Name: {data.name}
         </Typography>
         <Typography style={{ wordWrap: 'break-word' }}>
-          {`Prompt: ${data.properties.prompt}`}
+          Prompt: {data.properties.prompt}
         </Typography>
-        {/* TO DO - fix the deals - need to map */}
         {deals && (
           <>
             <Typography style={{ wordWrap: 'break-word' }}>
@@ -80,6 +81,7 @@ export const ImageLayout: FC<ImageLayoutProps> = ({
 function StatusResult(StatusResult: any): [any, any] {
   throw new Error('Function not implemented.');
 }
+
 //EX object
 // const json = {
 //   description: 'Prompt',

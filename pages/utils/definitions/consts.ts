@@ -1,10 +1,4 @@
-import {
-  Status,
-  Wallet,
-  NFTMetadata,
-  NetworkData,
-  ChainData,
-} from './interfaces';
+import { Status, Wallet, NFTMetadata } from './interfaces';
 
 export const INITIAL_WALLET_STATUS: Wallet = {
   injectedeth: false,
@@ -64,6 +58,21 @@ export const CHAIN_DATA = {
       url: 'https://hyperspace.filscan.io/address/general?address=',
     },
   },
+};
+
+export const ipfsHttpGatewayLink: string = `.ipfs.nftstorage.link/`;
+export const blockExplorerRoots = {
+  wallaby: [
+    'https://fvm.starboard.ventures/contracts/',
+    'https://wallaby.filscan.io/address/general?address=',
+  ],
+  hyperspace: [
+    'https://fvm.starboard.ventures/contracts/',
+    'https://hyperspace.filscan.io/address/general?address=',
+    'https://explorer.glif.io/?network=hyperspacenet',
+    'https://beryx.zondax.ch/',
+    'https://hyperspace.filfox.info/en',
+  ],
 };
 
 //can I and/or should I do this in hardhat network config
@@ -185,16 +194,4 @@ export const CHAIN_MAPPINGS = {
   //   blockExplorer: '',
   //   nftMarketplaceLinks: []
   // }
-};
-
-export const ipfsHttpGatewayLink: string = `.ipfs.nftstorage.link/`;
-export const blockExplorerRoots = {
-  wallaby: [
-    'https://fvm.starboard.ventures/contracts/',
-    'https://wallaby.filscan.io/address/general?address=',
-  ],
-  hyperspace: [
-    'https://fvm.starboard.ventures/contracts/',
-    'https://hyperspace.filscan.io/address/general?address=',
-  ],
 };

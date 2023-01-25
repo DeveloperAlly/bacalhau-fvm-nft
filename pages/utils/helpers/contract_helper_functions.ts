@@ -90,7 +90,14 @@ export const setContractEventListeners = async (
       getDisplayData();
       getNFTByOwner();
       // let bacImg = { ...bacalhauImages[0], minted: true };
-      setBacalhauImages([{ ...bacalhauImages[0], minted: true }]);
+      // console.log('bacImg', bacImg);
+      // setBacalhauImages([bacImg]);
+      setBacalhauImages((prevState: BacalhauImage[]) => [
+        {
+          ...prevState[0],
+          minted: 'true',
+        },
+      ]);
     }
   );
 };

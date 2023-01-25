@@ -23,6 +23,7 @@
     "dotenv": "^16.0.3",
     "eslint": "^8.7.0",
     "eslint-config-next": "^12.0.4",
+    "multiformats": "9.9.0",
     "next": "13.0.7",
     "nft.storage": "^7.0.0",
     "react": "18.2.0",
