@@ -231,7 +231,7 @@ const HomePage: FC<HomePageProps> = () => {
             nftJSON = {
               name: 'Bacalhau Hyperspace NFTs 2023',
               description: promptInput,
-              image: imageData, // use image Blob as `image` field?
+              image: imageData, // Blob
               properties: {
                 prompt: promptInput,
                 type: 'stable-diffusion-image',
@@ -285,7 +285,6 @@ const HomePage: FC<HomePageProps> = () => {
       .then((metadata) => {
         console.log('NFT Data pinned to IPFS & stored on Filecoin!');
         console.log('Metadata URI: ', metadata.url);
-        //ipfs://bafyreibuxx33xquhna345gna7ivgilk7nfod7odnx6jb7xfbslyhdv3m3y/metadata.json
         mintNFT(metadata);
       })
       .catch((err) => {
@@ -318,18 +317,11 @@ const HomePage: FC<HomePageProps> = () => {
             ...status,
             loading: loadingMsg('Minting NFT...'),
           });
-          await data //CURRENTLY NOT RETURNING TX - KNOWN BUG (I use event triggering to know - not ideal)
+          await data
             .wait()
             .then(async (tx: any) => {
               console.log('tx', tx);
-              //test only - NEEDS a backend API call.
-              // may be fixed in future update and not needed
-              // await callRPC('Filecoin.EthGetMessageCidByTransactionHash', [tx]);
-              // const txToCID = await callRPC(
-              //   'EthGetMessageCidByTransactionHash',
-              //   { tx }
-              // );
-              // console.log(txToCID);
+              //CURRENTLY NOT RETURNING TX - (I use event triggering to see)
               let tokenId = tx.events[1].args.tokenId.toString();
               console.log('tokenId args', tokenId);
               setStatus({

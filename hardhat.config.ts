@@ -19,22 +19,9 @@ if (!walletPrivateKey) {
   throw new Error('Please set your Wallet private key in a .env file');
 }
 
-// const chains = {
-//   filecoin: {mainnet: 314, testnet: 31415, rpc: }
-//   'arbitrum-mainnet': 42161,
-//   avalanche: 43114,
-//   bsc: 56,
-//   hardhat: 31337,
-//   mainnet: 1,
-//   'optimism-mainnet': 10,
-//   'polygon-mainnet': 137,
-//   'polygon-mumbai': 80001,
-//   sepolia: 11155111,
-// };
-
 const config: HardhatUserConfig = {
   solidity: '0.8.17',
-  defaultNetwork: 'filecoinWallaby',
+  defaultNetwork: 'filecoinHyperspace',
   networks: {
     hardhat: {},
     filecoinWallaby: {
@@ -44,49 +31,20 @@ const config: HardhatUserConfig = {
       //explorer: https://wallaby.filscan.io/ and starboard
     },
     filecoinHyperspace: {
-      url: 'https://api.hyperspace.node.glif.io/rpc/v1', //https://beryx.zondax.ch/
+      url: 'https://api.hyperspace.node.glif.io/rpc/v1', //https://beryx.zondax.ch/ //chainstack
       chainId: 3141,
       accounts: [process.env.WALLET_PRIVATE_KEY ?? 'undefined'],
-      //faucet: https://hyperspace.yoga/#faucet
-      //info: https://github.com/filecoin-project/testnet-hyperspace,
-      //explorer: glif, filfox??
     },
     ethGoerli: {
       url: 'https://eth-goerli.g.alchemy.com/v2/S4Rrp2eHb-xk5dxnNQygNcv-QfPmzTXX',
       chainId: 5,
       accounts: [process.env.WALLET_PRIVATE_KEY ?? 'undefined'],
     },
-    // bscTestnet: {
-    //   url: process.env.NEXT_PUBLIC_
-    //   chainId:
-    //   accounts: [],
-    // },
-    // polygonMumbai: {
-    //   url: process.env.NEXT_PUBLIC_
-    //   chainId:
-    //   accounts: [],
-    // },
-    // optimismTestnet: {
-    //   url: process.env.NEXT_PUBLIC_
-    //   chainId:
-    //   accounts: [],
-    // },
   },
   paths: {
     root: './pages/api/hardhat',
     tests: './pages/api/hardhat/tests', //who names a directory in the singular?!!!
     cache: './pages/api/hardhat/cache',
-  },
-  etherscan: {
-    // Your API key for Etherscan
-    // Obtain one at https://etherscan.io/
-    apiKey: process.env.ETHERSCAN_API_KEY,
-  },
-  gasReporter: {
-    currency: 'USD',
-    enabled: process.env.REPORT_GAS ? true : false,
-    excludeContracts: [],
-    src: './contracts',
   },
 };
 

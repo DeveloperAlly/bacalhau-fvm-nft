@@ -10,7 +10,6 @@ contract BacalhauFRC721 is ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    // bafkreifkwdhostelielketqzflbyhr4lldbpi5ycz3kclozf4sy6pchbau
     struct bacalhauFRC721NFT {
         address owner;
         string tokenURI;
@@ -27,14 +26,13 @@ contract BacalhauFRC721 is ERC721URIStorage {
     );
 
     constructor() ERC721("Bacalhau NFTs", "BAC") {
-      console.log("This is my Bacalhau FRC721 NFT contract");
+      console.log("Hello Fil-ders! Now creating Bacalhau FRC721 NFT contract!");
     }
 
     function mintBacalhauNFT(address owner, string memory ipfsURI)
         public
         returns (uint256)
     {
-        // require(_tokenIds.current() < maxNFTs);
         uint256 newItemId = _tokenIds.current();
 
         bacalhauFRC721NFT memory newNFT = bacalhauFRC721NFT({
@@ -61,6 +59,20 @@ contract BacalhauFRC721 is ERC721URIStorage {
     }
 
     /**
+     * @notice helper function to display NFTs for frontends
+     */
+    function getNFTCollection() public view returns (bacalhauFRC721NFT[] memory) {
+        return nftCollection;
+    }
+
+    /**
+     * @notice helper function to fetch NFT's by owner
+     */
+    function getNFTCollectionByOwner(address owner) public view returns (bacalhauFRC721NFT[] memory){
+        return nftCollectionByOwner[owner];
+    }
+    
+        /**
     */
     function mintMultipleBacalhauNFTs(address owner, string[] memory ipfsMetadata) public returns (uint256[] memory)
     {
@@ -77,19 +89,5 @@ contract BacalhauFRC721 is ERC721URIStorage {
         }
 
         return tokenIdArray;
-    }
-
-    /**
-     * @notice helper function to display NFTs for frontends
-     */
-    function getNFTCollection() public view returns (bacalhauFRC721NFT[] memory) {
-        return nftCollection;
-    }
-
-    /**
-     * @notice helper function to fetch NFT's by owner
-     */
-    function getNFTCollectionByOwner(address owner) public view returns (bacalhauFRC721NFT[] memory){
-        return nftCollectionByOwner[owner];
     }
 }

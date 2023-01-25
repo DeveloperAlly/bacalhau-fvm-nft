@@ -3,12 +3,13 @@ import { errorMsg } from '../messages';
 import { CID } from 'multiformats/cid';
 
 export const callBacalhauJob = async (promptInput: string) => {
+  //Bacalahau HTTP Stable Diffusion Endpoint
   const url = 'http://dashboard.bacalhau.org:1000/api/v1/stablediffusion';
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
   const data = {
-    prompt: promptInput,
+    prompt: promptInput, //The user text prompt!
   };
   /* FETCH FROM BACALHAU ENDPOINT */
   const cid = await fetch(url, {
@@ -19,6 +20,12 @@ export const callBacalhauJob = async (promptInput: string) => {
     .then(async (res) => {
       let body = await res.json();
       if (body.cid) {
+        console.log(
+          'Bacalhau V1 CID',
+          `https://${body.cid}.ipfs.nftstorage.link`
+        );
+        // Bacalhau returns a V0 CID which we want to convert to a V1 CID
+        // for easier usage with http gateways (ie. displaying the image on-screen)
         const cid = CID.parse(body.cid).toV1().toString();
         return cid;
       }
