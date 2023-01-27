@@ -1,6 +1,9 @@
 # bacalhau-fvm-nft
 Creating an NFT on the Filecoin Virtual Machine (FVM / FEVM) with Bacalhau Stable Diffusion
 
+![image](https://user-images.githubusercontent.com/12529822/215117833-3aa52700-7ee8-4298-9fbc-430af996e738.png)
+
+
 Readme coming soon!
 
 [See the Video Presentation here](https://www.youtube.com/watch?v=nu55bKXnjlU&t=2s)
