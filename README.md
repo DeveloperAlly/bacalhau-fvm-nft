@@ -5,7 +5,7 @@ Readme coming soon!
 
 [See the Video Presentation here](https://www.youtube.com/watch?v=nu55bKXnjlU&t=2s)
 
-[Blog Tutorial](https://developerally.hashnode.dev/build-your-own-ai-generated-art-nft-dapp)
+[Read the Blog Tutorial](https://developerally.hashnode.dev/build-your-own-ai-generated-art-nft-dapp)
 
 Contracts found under /pages/api/hardhat
 
