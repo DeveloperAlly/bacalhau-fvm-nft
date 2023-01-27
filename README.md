@@ -7,7 +7,7 @@ Readme coming soon!
 
 Contracts found under /pages/api/hardhat
 
-For now...
+Quick Start
 - clone
 - npm install
 - npm run dev
