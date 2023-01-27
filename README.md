@@ -3,6 +3,8 @@ Creating an NFT on the Filecoin Virtual Machine (FVM / FEVM) with Bacalhau Stabl
 
 Readme coming soon!
 
+Contracts found under /pages/api/hardhat
+
 For now...
 - clone
 - npm install
