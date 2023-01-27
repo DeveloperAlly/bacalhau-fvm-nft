@@ -9,6 +9,10 @@ Readme coming soon!
 
 Contracts found under /pages/api/hardhat
 
+Requirements:
+.env with an NFT.Storage API key & wallet private key for deployments
+node
+
 Quick Start
 - clone
 - npm install
