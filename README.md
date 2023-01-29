@@ -6,7 +6,7 @@ Creating an NFT on the Filecoin Virtual Machine (FVM / FEVM) with Bacalhau Stabl
 
 Readme coming soon!
 
-[See the Video Presentation here](https://www.youtube.com/watch?v=nu55bKXnjlU&t=2s)
+[See the Video Presentation here](https://youtu.be/dpWzLqt4LV4)
 
 [Read the Blog Tutorial](https://developerally.hashnode.dev/build-your-own-ai-generated-art-nft-dapp)
 
