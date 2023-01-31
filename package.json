@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start - p 3001",
     "lint": "next lint"
   },
   "dependencies": {
@@ -15,28 +15,29 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.4",
     "@mui/styled-engine-sc": "^5.11.0",
-    "@next/font": "13.0.7",
+    "@next/font": "13.1.6",
     "@openzeppelin/contracts": "^4.8.0",
     "@types/node": "^18.11.17",
     "@types/react-dom": "18.0.9",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "eslint": "^8.7.0",
-    "eslint-config-next": "^12.0.4",
+    "eslint": "8.33.0",
+    "eslint-config-next": "13.1.6",
     "multiformats": "9.9.0",
-    "next": "13.0.7",
+    "next": "13.1.6",
     "nft.storage": "^7.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^5.3.6"
+    "typescript": "4.9.5"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "@nomiclabs/hardhat-ethers": "^2.2.2",
     "@openzeppelin/hardhat-upgrades": "^1.22.0",
-    "@types/cors": "^2.8.13",
-    "@types/react": "^18.0.26",
+    "@types/node": "18.11.18",
+    "@types/react": "18.0.27",
     "@types/react-animations": "^1.0.0",
+    "@types/react-dom": "18.0.10",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/parser": "^5.0.1",
     "@zondax/filecoin-solidity": "^0.2.0-beta.3",
@@ -44,7 +45,6 @@
     "babel-plugin-styled-components": "^2.0.7",
     "ethers": "^5.7.2",
     "hardhat": "^2.12.5",
-    "prettier": "^2.5.1",
-    "typescript": "^4.4.4"
+    "prettier": "^2.5.1"
   }
 }
