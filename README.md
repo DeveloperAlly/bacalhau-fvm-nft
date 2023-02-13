@@ -4,9 +4,6 @@ Creating an NFT on the Filecoin Virtual Machine (FVM / FEVM) with Bacalhau Stabl
 https://user-images.githubusercontent.com/12529822/218363884-0ed11274-2cfd-4720-a2ae-ec083c320dd2.mov
 
 
-![image](https://user-images.githubusercontent.com/12529822/215117833-3aa52700-7ee8-4298-9fbc-430af996e738.png)
-
-
 Readme coming soon!
 
 [See the Video Presentation here](https://youtu.be/dpWzLqt4LV4)
@@ -34,3 +31,5 @@ Apologies for the spaghetti code - I was in a bit of a rush <3
 ❤️ [@DeveloperAlly](https://twitter.com/DeveloperAlly) ❤️
 
 #buildwithbacalhau
+
+![image](https://user-images.githubusercontent.com/12529822/215117833-3aa52700-7ee8-4298-9fbc-430af996e738.png)
