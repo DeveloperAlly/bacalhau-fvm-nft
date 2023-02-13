@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { ImageLayout } from '@Layouts';
 import { Box } from '@mui/material';
-const ipfsHttpGatewayLink = `.ipfs.nftstorage.link/`;
+const ipfsHttpGatewayLink = `.ipfs.nftstorage.link/`; //.ipfs.ipfs.joaoleitao.org
 
 //should take an array prop
 interface ImagePreviewContainerProps {
@@ -30,6 +30,7 @@ export const ImagePreviewContainer = ({
       }}
     >
       {images.map((item: any, x: number) => {
+        console.log('parsing image', item);
         let link, linkArr;
         if (mode === 'bacalhau') {
           linkArr = item.properties.origins.ipfs.split('/');

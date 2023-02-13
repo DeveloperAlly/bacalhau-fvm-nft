@@ -21,12 +21,13 @@ export const callBacalhauJob = async (promptInput: string) => {
       let body = await res.json();
       if (body.cid) {
         console.log(
-          'Bacalhau V1 CID',
+          'Bacalhau V0 CID',
           `https://${body.cid}.ipfs.nftstorage.link`
         );
         // Bacalhau returns a V0 CID which we want to convert to a V1 CID
         // for easier usage with http gateways (ie. displaying the image on-screen)
         const cid = CID.parse(body.cid).toV1().toString();
+        console.log('Bacalhau V1 CID', `https://${cid}.ipfs.nftstorage.link`);
         return cid;
       }
     })

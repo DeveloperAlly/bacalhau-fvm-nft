@@ -5,7 +5,7 @@ import {
   responsiveFontSizes,
 } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import HomePage from './HomePage.page';
+import HomePage from './HomePage';
 
 let theme = createTheme({
   palette: {
