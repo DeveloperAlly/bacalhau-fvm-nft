@@ -8,7 +8,7 @@ Readme coming soon!
 
 [See the Video Presentation here](https://youtu.be/dpWzLqt4LV4)
 
-[Read the Blog Tutorial](https://developerally.hashnode.dev/build-your-own-ai-generated-art-nft-dapp)
+[Read the Blog Tutorial](https://hackernoon.com/building-your-own-ai-generated-art-nft-dapp-with-bacalhau)
 
 Contracts found under /pages/api/hardhat
 
@@ -19,6 +19,14 @@ node
 Quick Start
 - clone
 - npm install
+- add a .env file with the needed env variables (see .env.example)
 - npm run dev
 
-& apologies for the spaghetti code - I was in a bit of a rush <3
+Deploy the contract by running
+```npx hardhat run pages/api/hardhat/deploy/deployBacalhauFRC721.ts --network filecoinHyperspace ```
+
+Apologies for the spaghetti code - I was in a bit of a rush <3
+
+❤️ [@DeveloperAlly](https://twitter.com/DeveloperAlly) ❤️
+
+#buildwithbacalhau
