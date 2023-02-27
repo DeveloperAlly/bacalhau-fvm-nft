@@ -1,5 +1,5 @@
 // import { ipfsHttpGatewayLink } from '../consts';
-const ipfsHttpGatewayLink = `.ipfs.nftstorage.link/`;
+const ipfsHttpGatewayLink = `.ipfs.w3s.link/`;
 
 export const formatNFTCollectionForDisplay = async (
   nftCollection: Object[],
@@ -55,5 +55,6 @@ export const createImageView = (metadata: any) => {
   //   console.log('creating image view', metadata);
   const imgViewArray = metadata.data.image.pathname.split('/');
   const imgViewString = `https://${imgViewArray[2]}${ipfsHttpGatewayLink}${imgViewArray[3]}`;
+  console.log('imageview link', imgViewString);
   return imgViewString;
 };

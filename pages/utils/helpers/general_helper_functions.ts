@@ -1,10 +1,14 @@
 import { Status } from '../definitions/interfaces';
 import { errorMsg } from '../messages';
 import { CID } from 'multiformats/cid';
+import { create } from 'ipfs-http-client';
+
+const ipfsHttpGatewayLink = `.ipfs.w3s.link/`;
 
 export const callBacalhauJob = async (promptInput: string) => {
   //Bacalahau HTTP Stable Diffusion Endpoint
-  const url = 'http://dashboard.bacalhau.org:1000/api/v1/stablediffusion';
+  console.log('making call to bacalhau');
+  const url = 'https://dashboard.bacalhau.org/api/v1/stablediffusion';
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
   };
@@ -16,26 +20,49 @@ export const callBacalhauJob = async (promptInput: string) => {
     method: 'POST',
     body: JSON.stringify(data),
     headers: headers,
+    // mode: 'no-cors',
   })
     .then(async (res) => {
+      console.log('res', res);
       let body = await res.json();
+      console.log('body', body);
       if (body.cid) {
         console.log(
           'Bacalhau V0 CID',
-          `https://${body.cid}.ipfs.nftstorage.link`
+          `https://${body.cid}${ipfsHttpGatewayLink}`
         );
         // Bacalhau returns a V0 CID which we want to convert to a V1 CID
         // for easier usage with http gateways (ie. displaying the image on-screen)
-        const cid = CID.parse(body.cid).toV1().toString();
-        console.log('Bacalhau V1 CID', `https://${cid}.ipfs.nftstorage.link`);
+        const cid = body.cid; // CID.parse(body.cid).toV1().toString();
+        console.log('Bacalhau V1 CID', `https://${cid}${ipfsHttpGatewayLink}`);
         return cid;
       }
     })
     .catch((err) => {
       console.log('error in bac job', err);
+      return;
       // return { status: 'ERR' };
     });
   return cid;
+};
+
+export const getLinks = async (ipfsPath: string) => {
+  console.log('ipfslinkpath', ipfsPath);
+  const links = await fetch(`https://ipfs.io/api/v0/ls?arg=${ipfsPath}`);
+  // const url = 'https://w3s.link/ipfs/';
+  // const ipfs = create({ url });
+  // console.log('ipfs', ipfs);
+
+  // const links = [];
+  // for await (const link of ipfs.ls(ipfsPath)) {
+  //   links.push(link);
+  // }
+  const alllinks = await links.json();
+  console.log('links', alllinks, typeof alllinks);
+  console.log('links', alllinks.Objects[0].Links[1].Hash);
+  const imgLinkv0 = alllinks.Objects[0].Links[1].Hash;
+  const imageLink = CID.parse(imgLinkv0).toV1().toString();
+  return imageLink;
 };
 
 export const getImageBlob = async (
@@ -44,7 +71,12 @@ export const getImageBlob = async (
   imageHTTPURL: string // this is the imageHTTPURL will just be ipfs://cid for normal image
 ) => {
   const r = await fetch(imageHTTPURL);
-  console.log('r', r);
+  // , {
+  //   method: 'GET', // *GET, POST, PUT, DELETE, etc.
+  //   mode: 'no-cors',
+  // }); // no-cors, *cors, same-origin);
+  console.log('fetching image', imageHTTPURL);
+  console.log('responseblob', r);
   if (!r.ok) {
     // throw new Error(`error fetching image: [${r.statusText}]: ${r.status}`);
     setStatus({
@@ -52,6 +84,7 @@ export const getImageBlob = async (
       loading: '',
       error: errorMsg(r.statusText, 'Error fetching message'),
     });
+    return r;
   }
   return r.blob();
 };

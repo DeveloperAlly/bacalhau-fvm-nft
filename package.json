@@ -23,6 +23,8 @@
     "dotenv": "^16.0.3",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
+    "ipfs-core": "^0.18.0",
+    "ipfs-http-client": "^60.0.0",
     "multiformats": "9.9.0",
     "next": "13.1.6",
     "nft.storage": "^7.0.0",
