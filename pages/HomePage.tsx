@@ -50,7 +50,6 @@ import {
   getLinks,
 } from '@Utils/helpers/general_helper_functions';
 import { BacalhauImage, BacalhauJob } from '@Utils/definitions/interfaces';
-import { CID } from 'multiformats/cid';
 
 type HomePageProps = {
   children?: ReactNode;
@@ -268,71 +267,6 @@ const HomePage: FC<HomePageProps> = () => {
         },
       },
     };
-    // const ipfs = await IPFS.create();
-    // const node = await ipfs.object.get('');
-    await getImageBlob(status, setStatus, imageHTTPURL)
-      .then(async (imageData) => {
-        imageBlob = imageData;
-        console.log('imageData', imageData);
-        // if (!imageData.blob) {
-        //   setStatus({
-        //     ...status,
-        //     loading: '',
-        //     error: errorMsg(imageData.statusText, 'Error fetching message'),
-        //   });
-        //   setBacalhauImages([]);
-        //   return;
-        // }
-        // await NFTStorageClient.storeBlob(imageData)
-        //   .then((imageIPFS) => {
-        //     if (imageData) {
-        //       console.log(imageIPFS);
-        //       nftJSON = {
-        //         name: 'Bacalhau Hyperspace NFTs 2023',
-        //         description: promptInput,
-        //         image: imageData, // Blob
-        //         properties: {
-        //           prompt: promptInput,
-        //           type: 'stable-diffusion-image',
-        //           origins: {
-        //             ipfs: `ipfs://${imageIPFS}`,
-        //             bacalhauipfs: imageIPFSOrigin,
-        //           },
-        //           innovation: 100,
-        //           content: {
-        //             'text/markdown': promptInput,
-        //           },
-        //         },
-        //       };
-        //     }
-        //   })
-        //   .catch((err) => console.log('error creating blob cid', err));
-      })
-      .catch((err) => {
-        console.log('error fetching image blob');
-      });
-
-    nftJSON = {
-      name: 'Bacalhau Hyperspace NFTs 2023',
-      description: promptInput,
-      image: imageBlob ? imageBlob : new Blob(['rainbow unicorn']),
-      properties: {
-        prompt: promptInput,
-        type: 'stable-diffusion-image',
-        origins: {
-          ipfs: imageIPFSOrigin,
-          bacalhauipfs: imageHTTPURL,
-        },
-        innovation: 100,
-        content: {
-          'text/markdown': promptInput,
-        },
-      },
-    };
-    await NFTStorageClient.store(nftJSON).then((metadata) => {
-      return metadata;
-    });
-    return nftJSON;
   };
 
   // const createNFTMetadata1 = async (
@@ -404,8 +338,6 @@ const HomePage: FC<HomePageProps> = () => {
       ...status,
       loading: loadingMsg('Saving Metadata to NFT.Storage....'),
     });
-    // const linkArr = nftJson.image.properties.origins.ipfs.split('/');
-    // const link = `https://${linkArr[2]}${ipfsHttpGatewayLink}/outputs/image0.png`;
     const link = nftJson.properties.origins.bacalhauipfs;
     await getImageBlob(status, setStatus, link)
       .then(async (imageData) => {
@@ -449,30 +381,6 @@ const HomePage: FC<HomePageProps> = () => {
 
   // Connect to the contract to mint the NFT!
   const mintNFT = async (metadata: any) => {
-    // const imageIPFSOrigin = `ipfs://${cid}/outputs/image0.png`;
-    // const imageHTTPURL = `https://${cid}.ipfs.w3s.link/outputs/image0.png`;
-    // await createNFTMetadata(promptInput, imageIPFSOrigin, imageHTTPURL)
-    //   .then((data: any) => {
-    //     console.log('Nft Metadata created', data);
-    //     const bacalhauResult = { ...data, minted: false };
-    //     console.log('bacResult', bacalhauResult, bacalhauImages);
-    //     setBacalhauImages([data]);
-    //     setStatus({
-    //       ...INITIAL_TRANSACTION_STATE,
-    //       success: genericMsg(
-    //         'Success running Bacalhau Job',
-    //         `Job output CID: ${cid}`
-    //       ),
-    //     });
-    //   })
-    // .catch((err) => {
-    //   setStatus({
-    //     ...INITIAL_TRANSACTION_STATE,
-    //     error: errorMsg('Error creating NFT Metadata', err),
-    //   });
-    //   console.log('err', err);
-    // });
-    //wallet checks required here.
     setStatus({
       ...status,
       loading: loadingMsg('Waiting for wallet permission...'),
@@ -499,6 +407,12 @@ const HomePage: FC<HomePageProps> = () => {
               let tokenId = tx.events[1].args.tokenId.toString();
               console.log('tokenId args success minting', tokenId);
               setBacalhauImages([]);
+              getDisplayData();
+              getNFTByOwner();
+              setStatus({
+                ...INITIAL_WALLET_STATUS,
+                success: successMintingNFTmsg(tokenId),
+              });
             })
             .catch((err: any) => {
               console.log('ERROR', err);
