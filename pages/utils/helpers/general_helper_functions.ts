@@ -33,8 +33,13 @@ export const callBacalhauJob = async (promptInput: string) => {
         );
         // Bacalhau returns a V0 CID which we want to convert to a V1 CID
         // for easier usage with http gateways (ie. displaying the image on-screen)
-        const cid = body.cid; // CID.parse(body.cid).toV1().toString();
-        console.log('Bacalhau V1 CID', `https://${cid}${ipfsHttpGatewayLink}`);
+        const cid = CID.parse(body.cid).toV1().toString();
+        const pinned = await pinToNFTStorage(cid);
+        console.log(
+          'Bacalhau V1 CID',
+          `https://${cid}${ipfsHttpGatewayLink}`,
+          pinned
+        );
         return cid;
       }
     })
@@ -45,6 +50,29 @@ export const callBacalhauJob = async (promptInput: string) => {
     });
   return cid;
 };
+
+export const pinToNFTStorage = async (cid: string) => {
+  const authKey = process.env.NEXT_PUBLIC_NFT_STORAGE_API_KEY;
+  const pinned = await fetch('https://api.nft.storage/pins', {
+    body: JSON.stringify({ cid: cid }),
+    headers: {
+      Accept: '*/*',
+      Authorization: `Bearer ${authKey}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+  if (pinned) {
+    console.log('pinned', pinned);
+    let blob = await (await pinned).blob();
+    console.log('pinned blob', blob);
+    await delay(5000);
+    return pinned;
+  }
+  return;
+};
+
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export const getLinks = async (ipfsPath: string) => {
   console.log('ipfslinkpath', ipfsPath);
@@ -71,7 +99,7 @@ export const getImageBlob = async (
   imageHTTPURL: string // this is the imageHTTPURL will just be ipfs://cid for normal image
 ) => {
   const r = await fetch(imageHTTPURL);
-  // , {
+  // const r = await fetch(imageHTTPURL, {
   //   method: 'GET', // *GET, POST, PUT, DELETE, etc.
   //   mode: 'no-cors',
   // }); // no-cors, *cors, same-origin);
@@ -84,7 +112,7 @@ export const getImageBlob = async (
       loading: '',
       error: errorMsg(r.statusText, 'Error fetching message'),
     });
-    return r;
+    return r.statusText;
   }
   return r.blob();
 };
