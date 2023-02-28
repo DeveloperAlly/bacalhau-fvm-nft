@@ -66,7 +66,7 @@ export const pinToNFTStorage = async (cid: string) => {
     console.log('pinned', pinned);
     let blob = await (await pinned).blob();
     console.log('pinned blob', blob);
-    await delay(5000);
+    await delay(8000);
     return pinned;
   }
   return;

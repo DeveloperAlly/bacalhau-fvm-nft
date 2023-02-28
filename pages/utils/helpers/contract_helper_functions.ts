@@ -90,12 +90,12 @@ export const setContractEventListeners = async (
       });
       getDisplayData();
       getNFTByOwner();
-      setBacalhauImages((prevState: BacalhauImage[]) => [
-        {
-          ...prevState[0],
-          minted: 'true',
-        },
-      ]);
+      // setBacalhauImages((prevState: BacalhauImage[]) => [
+      //   {
+      //     ...prevState[0],
+      //     minted: 'true',
+      //   },
+      // ]);
     }
   );
 };

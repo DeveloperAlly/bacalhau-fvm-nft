@@ -39,14 +39,17 @@ export const ImagePreviewContainer = ({
           // link = `https://${linkArr[2]}${ipfsHttpGatewayLink}/outputs/image0.png`;
           linkArr = item.properties.origins.ipfs.split('/');
           link = `http://127.0.0.1:8080/ipfs/${linkArr[2]}/outputs/image0.png`;
+          console.log('linkywhy', link);
           // link = item.properties.origins.bacalhauipfs;
           // console.log('baclink', link);
         } else if (item.image) {
           // console.log('parsing image', item);
           // linkArr = item.properties.origins.ipfs.split('/');
           // link = `https://${linkArr[2]}${ipfsHttpGatewayLink}/outputs/image0.png`;
+          console.log('image', item.image);
           linkArr = item.image.split('/');
           link = `https://${linkArr[2]}${ipfsHttpGatewayLink}${linkArr[3]}`;
+          console.log('link nft', link);
           // console.log('link', link);
         }
         return (
